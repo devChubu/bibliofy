@@ -19,7 +19,9 @@ Generates a self-contained HTML learning guide document. Two modes: **Project Gu
 - Single `.html` file, all CSS and JS inlined
 - Zero external dependencies — no CDN, no build step, works offline
 - Three theme modes: Light (modern docs), Dark (night reading), Book (warm paper, serif fonts)
-- File naming: `{topic_slug}_learning_guide.html`
+- File naming: `bibliofy_{mode}_{topic_slug}.html`
+  - Mode is `textbook` or `project-guide`
+  - Examples: `bibliofy_textbook_buck_converters.html`, `bibliofy_project-guide_tausug.html`
 - Target size: 50-200 KB depending on content density
 
 ## Workflow
@@ -106,7 +108,8 @@ Build the complete HTML file by filling the template:
    - `{{SIDEBAR_NAV}}` — Built from the approved outline using the sidebar nav pattern
    - `{{CONTENT}}` — All chapters, sequentially
    - `{{BIBLIOGRAPHY}}` — Master bibliography list items
-   - `{{FOOTER}}` — Generation date and source info
+   - `{{BIBLIOFY_MODE}}` — "Bibliofy Textbook" or "Bibliofy Project Guide" (cover banner badge)
+   - `{{FOOTER}}` — Generation date (e.g., "October 2026")
 
 2. **Write each chapter** following the chapter structure pattern from content-guide.md:
    - Open with `h2` + `chapter-summary` (with key question and reading time)

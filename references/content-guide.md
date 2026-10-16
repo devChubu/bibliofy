@@ -362,8 +362,11 @@ The opening section of the guide. One per document.
 <div class="cover-banner">
   <h1>Guide Title</h1>
   <div class="subtitle">A one-to-three sentence description of what this guide covers and who it's for.</div>
+  <div class="bibliofy-badge">Bibliofy Textbook</div>
 </div>
 ```
+
+Badge text is either **"Bibliofy Textbook"** or **"Bibliofy Project Guide"** depending on the selected mode.
 
 ---
 

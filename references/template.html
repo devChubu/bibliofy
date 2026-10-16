@@ -273,8 +273,19 @@ body {
   padding: 16px 20px;
   font-size: 0.7rem;
   color: var(--sidebar-text);
-  opacity: .4;
+  opacity: .5;
   margin-top: 20px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.sidebar-footer .bibliofy-brand {
+  font-family: var(--font-heading);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  opacity: .8;
+}
+.sidebar-footer .bibliofy-brand span {
+  font-weight: 700;
 }
 
 /* ── Main Content ── */
@@ -347,6 +358,18 @@ a:hover { text-decoration: underline; }
   margin-top: 12px;
   line-height: 1.6;
   max-width: 600px;
+}
+.cover-banner .bibliofy-badge {
+  display: inline-block;
+  margin-top: 16px;
+  font-size: 0.72rem;
+  font-family: var(--font-heading);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 4px 12px;
+  border: 1px solid rgba(255,255,255,.35);
+  border-radius: 20px;
+  opacity: .7;
 }
 
 /* ── Chapter Summary ── */
@@ -852,7 +875,10 @@ tr:last-child td { border-bottom: none; }
     <a href="#ch2-section1">Section One</a>
     -->
   </nav>
-  <div class="sidebar-footer">{{FOOTER}}</div>
+  <div class="sidebar-footer">
+    <div class="bibliofy-brand"><span>Bibliofy</span></div>
+    {{FOOTER}}
+  </div>
 </div>
 
 <!-- Main Content -->
@@ -861,6 +887,7 @@ tr:last-child td { border-bottom: none; }
   <div class="cover-banner">
     <h1>{{TITLE}}</h1>
     <div class="subtitle">{{DESCRIPTION}}</div>
+    <div class="bibliofy-badge">{{BIBLIOFY_MODE}}</div>
   </div>
 
   {{CONTENT}}
