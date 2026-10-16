@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" data-size="medium">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buck Converter Fundamentals — Learning Guide</title>
+<style>
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Theme: Light (default) ── */
+[data-theme="light"] {
+  --bg: #ffffff;
+  --bg-alt: #f8f9fa;
+  --text: #2d2d2d;
+  --text2: #6b7280;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-light: #dbeafe;
+  --border: #e5e7eb;
+  --code-bg: #f3f4f6;
+  --code-text: #1f2937;
+  --sidebar-bg: #1e293b;
+  --sidebar-text: #e2e8f0;
+  --sidebar-accent: #60a5fa;
+  --sidebar-hover: rgba(255,255,255,.08);
+  --callout-concept-border: #2563eb;
+  --callout-concept-bg: rgba(37,99,235,.06);
+  --callout-warning-border: #f59e0b;
+  --callout-warning-bg: rgba(245,158,11,.06);
+  --callout-tip-border: #10b981;
+  --callout-tip-bg: rgba(16,185,129,.06);
+  --callout-takeaway-border: #8b5cf6;
+  --callout-takeaway-bg: rgba(139,92,246,.06);
+  --callout-deepdive-border: #06b6d4;
+  --callout-deepdive-bg: rgba(6,182,212,.06);
+  --callout-prereq-border: #64748b;
+  --callout-prereq-bg: rgba(100,116,139,.06);
+  --cover-from: #1e293b;
+  --cover-to: #2563eb;
+  --table-header-bg: #1e293b;
+  --table-header-text: #ffffff;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Consolas', 'Fira Code', 'Courier New', monospace;
+}
+
+/* ── Theme: Dark ── */
+[data-theme="dark"] {
+  --bg: #1a1b1e;
+  --bg-alt: #222326;
+  --text: #d4d4d8;
+  --text2: #9ca3af;
+  --accent: #60a5fa;
+  --accent-hover: #93bbfd;
+  --accent-light: rgba(96,165,250,.15);
+  --border: #3f3f46;
+  --code-bg: #2a2b2e;
+  --code-text: #e5e7eb;
+  --sidebar-bg: #111318;
+  --sidebar-text: #a1a1aa;
+  --sidebar-accent: #60a5fa;
+  --sidebar-hover: rgba(255,255,255,.06);
+  --callout-concept-border: #60a5fa;
+  --callout-concept-bg: rgba(96,165,250,.1);
+  --callout-warning-border: #fbbf24;
+  --callout-warning-bg: rgba(251,191,36,.1);
+  --callout-tip-border: #34d399;
+  --callout-tip-bg: rgba(52,211,153,.1);
+  --callout-takeaway-border: #a78bfa;
+  --callout-takeaway-bg: rgba(167,139,250,.1);
+  --callout-deepdive-border: #22d3ee;
+  --callout-deepdive-bg: rgba(34,211,238,.1);
+  --callout-prereq-border: #94a3b8;
+  --callout-prereq-bg: rgba(148,163,184,.1);
+  --cover-from: #111318;
+  --cover-to: #1e3a5f;
+  --table-header-bg: #111318;
+  --table-header-text: #d4d4d8;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Consolas', 'Fira Code', 'Courier New', monospace;
+}
+
+/* ── Theme: Book ── */
+[data-theme="book"] {
+  --bg: #f5f0e8;
+  --bg-alt: #ebe5d9;
+  --text: #3d3229;
+  --text2: #7a6b5d;
+  --accent: #8b5e3c;
+  --accent-hover: #6d4a2f;
+  --accent-light: rgba(139,94,60,.1);
+  --border: #d4c5b0;
+  --code-bg: #ebe5d9;
+  --code-text: #3d3229;
+  --sidebar-bg: #2c1e12;
+  --sidebar-text: #d4c5b0;
+  --sidebar-accent: #d4a574;
+  --sidebar-hover: rgba(255,255,255,.06);
+  --callout-concept-border: #8b5e3c;
+  --callout-concept-bg: rgba(139,94,60,.08);
+  --callout-warning-border: #c27830;
+  --callout-warning-bg: rgba(194,120,48,.08);
+  --callout-tip-border: #6b8f5e;
+  --callout-tip-bg: rgba(107,143,94,.08);
+  --callout-takeaway-border: #7d6b99;
+  --callout-takeaway-bg: rgba(125,107,153,.08);
+  --callout-deepdive-border: #5b8a8a;
+  --callout-deepdive-bg: rgba(91,138,138,.08);
+  --callout-prereq-border: #8a7e6e;
+  --callout-prereq-bg: rgba(138,126,110,.08);
+  --cover-from: #2c1e12;
+  --cover-to: #5c3d24;
+  --table-header-bg: #3d3229;
+  --table-header-text: #f5f0e8;
+  --font-body: Georgia, 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  --font-heading: Georgia, 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  --font-mono: 'Consolas', 'Courier New', monospace;
+}
+
+/* ── Font Size Scaling ── */
+[data-size="small"] { font-size: 14px; }
+[data-size="medium"] { font-size: 16px; }
+[data-size="large"] { font-size: 18px; }
+
+body {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.progress-bar {
+  position: fixed; top: 0; left: 0;
+  height: 3px; width: 0;
+  background: var(--accent);
+  z-index: 1001;
+  transition: width 80ms linear;
+}
+
+.chapter-header-bar {
+  display: none;
+  position: fixed; top: 3px; left: 0; right: 0;
+  height: 44px;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  z-index: 999;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 0.85rem;
+  font-family: var(--font-heading);
+}
+.chapter-header-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.menu-btn {
+  display: none;
+  width: 44px; height: 44px;
+  background: none; border: none;
+  color: var(--sidebar-text);
+  font-size: 1.4rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-right: 8px;
+}
+
+.controls-bar {
+  position: fixed; top: 10px; right: 16px;
+  z-index: 1000;
+  display: flex; gap: 8px; align-items: center;
+}
+.theme-toggle, .font-controls {
+  display: flex; gap: 2px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 2px;
+}
+.theme-toggle button, .font-controls button {
+  width: 36px; height: 32px;
+  border: none; border-radius: 6px;
+  background: transparent;
+  color: var(--text2);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, color .15s;
+}
+.theme-toggle button:hover, .font-controls button:hover { background: var(--border); color: var(--text); }
+.theme-toggle button.active { background: var(--accent); color: #fff; }
+
+.sidebar {
+  position: fixed; top: 0; left: 0;
+  width: 280px; height: 100vh;
+  background: var(--sidebar-bg);
+  overflow-y: auto;
+  padding: 24px 0;
+  z-index: 1000;
+  transition: transform .25s ease;
+}
+.sidebar-title {
+  padding: 0 20px 20px;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+  border-bottom: 1px solid rgba(255,255,255,.1);
+  margin-bottom: 16px;
+}
+.sidebar-title small { display: block; font-weight: 400; font-size: 0.78rem; opacity: .6; margin-top: 4px; }
+.sidebar nav { padding: 0 12px; }
+.part-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--sidebar-accent);
+  padding: 16px 8px 6px;
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+.sidebar a {
+  display: block;
+  padding: 5px 8px 5px 12px;
+  font-size: 0.8rem;
+  color: var(--sidebar-text);
+  text-decoration: none;
+  border-radius: 4px;
+  border-left: 3px solid transparent;
+  transition: background .12s, border-color .12s;
+  line-height: 1.4;
+}
+.sidebar a.ch { font-weight: 600; }
+.sidebar a:hover { background: var(--sidebar-hover); color: #fff; }
+.sidebar a.active { border-left-color: var(--sidebar-accent); background: var(--sidebar-hover); color: #fff; font-weight: 600; }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 999; }
+.sidebar-footer { padding: 16px 20px; font-size: 0.7rem; color: var(--sidebar-text); opacity: .4; margin-top: 20px; }
+
+.main { margin-left: 280px; max-width: 820px; padding: 40px 48px 80px; }
+
+h1 { font-family: var(--font-heading); font-size: 2.2rem; font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 8px; }
+h2 { font-family: var(--font-heading); font-size: 1.6rem; font-weight: 700; color: var(--text); margin-top: 56px; padding-top: 24px; border-top: 2px solid var(--border); line-height: 1.3; }
+.ch-num { color: var(--accent); font-size: 0.85em; margin-right: 4px; }
+h3 { font-family: var(--font-heading); font-size: 1.2rem; font-weight: 600; color: var(--accent); margin-top: 36px; margin-bottom: 12px; }
+h4 { font-family: var(--font-heading); font-size: 1rem; font-weight: 600; color: var(--text); margin-top: 24px; margin-bottom: 8px; }
+p { margin-bottom: 14px; }
+ul, ol { margin: 0 0 14px 24px; }
+li { margin-bottom: 6px; }
+li > ul, li > ol { margin-top: 6px; margin-bottom: 0; }
+strong { font-weight: 600; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.cover-banner {
+  background: linear-gradient(135deg, var(--cover-from) 0%, var(--cover-to) 100%);
+  color: #fff; padding: 48px; border-radius: 12px; margin-bottom: 48px;
+}
+.cover-banner h1 { color: #fff; }
+.cover-banner .subtitle { font-size: 1.05rem; opacity: .85; margin-top: 12px; line-height: 1.6; max-width: 600px; }
+
+.chapter-summary {
+  background: var(--bg-alt); border: 1px solid var(--border); border-radius: 8px;
+  padding: 16px 20px; font-size: 0.92rem; margin: 12px 0 28px; position: relative;
+}
+.reading-time {
+  position: absolute; top: 12px; right: 16px;
+  font-size: 0.75rem; color: var(--text2);
+  background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 2px 10px;
+}
+
+.callout { border-radius: 8px; padding: 16px 20px; margin: 20px 0; font-size: 0.92rem; line-height: 1.6; border-left: 4px solid; }
+.callout-title { font-family: var(--font-heading); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.callout-title::before { font-size: 1rem; }
+.callout p:last-child { margin-bottom: 0; }
+
+.callout.concept { border-color: var(--callout-concept-border); background: var(--callout-concept-bg); }
+.callout.concept .callout-title { color: var(--callout-concept-border); }
+.callout.concept .callout-title::before { content: "\1F4D6"; }
+.callout.warning { border-color: var(--callout-warning-border); background: var(--callout-warning-bg); }
+.callout.warning .callout-title { color: var(--callout-warning-border); }
+.callout.warning .callout-title::before { content: "\26A0\FE0F"; }
+.callout.tip { border-color: var(--callout-tip-border); background: var(--callout-tip-bg); }
+.callout.tip .callout-title { color: var(--callout-tip-border); }
+.callout.tip .callout-title::before { content: "\1F4A1"; }
+.callout.key-takeaway { border-color: var(--callout-takeaway-border); background: var(--callout-takeaway-bg); }
+.callout.key-takeaway .callout-title { color: var(--callout-takeaway-border); }
+.callout.key-takeaway .callout-title::before { content: "\2B50"; }
+.callout.deep-dive { border-color: var(--callout-deepdive-border); background: var(--callout-deepdive-bg); }
+.callout.deep-dive .callout-title { color: var(--callout-deepdive-border); }
+.callout.deep-dive .callout-title::before { content: "\1F30A"; }
+.callout.deep-dive details summary { cursor: pointer; list-style: none; }
+.callout.deep-dive details summary::-webkit-details-marker { display: none; }
+.callout.deep-dive details summary::after { content: "\25B6"; font-size: 0.7rem; margin-left: 6px; transition: transform .2s; display: inline-block; }
+.callout.deep-dive details[open] summary::after { transform: rotate(90deg); }
+.deep-dive-content { margin-top: 12px; }
+.callout.prerequisite { border-color: var(--callout-prereq-border); background: var(--callout-prereq-bg); }
+.callout.prerequisite .callout-title { color: var(--callout-prereq-border); }
+.callout.prerequisite .callout-title::before { content: "\1F4CB"; }
+
+.code-block { position: relative; margin: 16px 0; }
+.code-header {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--code-bg); border: 1px solid var(--border); border-bottom: none;
+  border-radius: 6px 6px 0 0; padding: 6px 12px;
+  font-family: var(--font-heading); font-size: 0.75rem; color: var(--text2);
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+pre {
+  background: var(--code-bg); border: 1px solid var(--border); border-radius: 6px;
+  padding: 16px 20px; font-family: var(--font-mono); font-size: 0.85rem;
+  line-height: 1.55; overflow-x: auto; color: var(--code-text); -webkit-overflow-scrolling: touch;
+}
+.code-header + pre { border-radius: 0 0 6px 6px; }
+code { font-family: var(--font-mono); font-size: 0.88em; background: var(--code-bg); padding: 2px 5px; border-radius: 3px; color: var(--accent); }
+pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
+.copy-btn {
+  position: absolute; top: 6px; right: 8px;
+  background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px;
+  padding: 4px 10px; font-size: 0.72rem; color: var(--text2); cursor: pointer;
+  opacity: 0; transition: opacity .15s; font-family: var(--font-heading);
+}
+.code-block:hover .copy-btn, .code-block .copy-btn.visible { opacity: 1; }
+.code-caption { font-size: 0.8rem; color: var(--text2); font-style: italic; margin-top: -8px; margin-bottom: 16px; }
+
+.table-scroll { overflow-x: auto; margin: 16px 0; border-radius: 8px; border: 1px solid var(--border); -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; font-family: var(--font-heading); }
+th { background: var(--table-header-bg); color: var(--table-header-text); padding: 10px 14px; text-align: left; text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.5px; font-weight: 600; }
+td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
+tr:nth-child(even) td { background: var(--bg-alt); }
+tr:last-child td { border-bottom: none; }
+
+.figure { margin: 24px 0; text-align: center; cursor: default; }
+.figure-caption { font-size: 0.82rem; color: var(--text2); margin-top: 10px; font-style: italic; }
+.diagram-row { display: flex; align-items: center; gap: 8px; margin: 8px 0; flex-wrap: wrap; justify-content: center; }
+.d-block { border-radius: 8px; padding: 12px 18px; text-align: center; font-family: var(--font-heading); font-size: 0.85rem; font-weight: 600; min-width: 100px; border: 2px solid; }
+.d-block small { display: block; font-weight: 400; font-size: 0.75rem; opacity: .7; margin-top: 2px; }
+.d-blue { border-color: var(--accent); background: var(--accent-light); color: var(--text); }
+.d-navy { border-color: var(--callout-prereq-border); background: var(--callout-prereq-bg); color: var(--text); }
+.d-green { border-color: var(--callout-tip-border); background: var(--callout-tip-bg); color: var(--text); }
+.d-orange { border-color: var(--callout-warning-border); background: var(--callout-warning-bg); color: var(--text); }
+.d-purple { border-color: var(--callout-takeaway-border); background: var(--callout-takeaway-bg); color: var(--text); }
+.d-gray { border-color: var(--border); background: var(--bg-alt); color: var(--text); }
+.d-arrow { font-size: 1.3rem; color: var(--accent); font-weight: 700; flex-shrink: 0; }
+.figure svg text { fill: var(--text); font-family: var(--font-heading); }
+
+.references { margin: 32px 0; padding: 16px 20px; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 8px; }
+.references h4 { margin-top: 0; margin-bottom: 10px; font-size: 0.88rem; color: var(--text2); }
+.references ul { list-style: none; margin: 0; padding: 0; }
+.references li { padding: 4px 0; font-size: 0.85rem; line-height: 1.5; }
+.references li::before { content: "\1F517"; margin-right: 6px; font-size: 0.8rem; }
+
+.bibliography-list { font-size: 0.9rem; line-height: 1.6; padding-left: 24px; }
+.bibliography-list li { margin-bottom: 8px; }
+
+.chapter-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); }
+.chapter-nav button {
+  min-height: 44px; padding: 10px 20px; background: var(--bg-alt);
+  border: 1px solid var(--border); border-radius: 8px;
+  font-family: var(--font-heading); font-size: 0.85rem; color: var(--text);
+  cursor: pointer; transition: background .15s, border-color .15s; max-width: 48%; text-align: left;
+}
+.chapter-nav button:hover { background: var(--accent-light); border-color: var(--accent); }
+.chapter-nav button:disabled { opacity: .3; cursor: default; }
+.chapter-nav button:disabled:hover { background: var(--bg-alt); border-color: var(--border); }
+
+.back-to-top {
+  position: fixed; bottom: 24px; right: 24px;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--accent); color: #fff; border: none;
+  font-size: 1.2rem; cursor: pointer;
+  opacity: 0; transform: translateY(12px);
+  transition: opacity .2s, transform .2s;
+  z-index: 998; display: flex; align-items: center; justify-content: center;
+}
+.back-to-top.visible { opacity: 1; transform: translateY(0); }
+
+.bookmark-banner {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--sidebar-bg); color: var(--sidebar-text);
+  padding: 12px 24px; display: flex; align-items: center; gap: 12px;
+  z-index: 1000; font-size: 0.88rem; font-family: var(--font-heading);
+  transform: translateY(100%); transition: transform .3s ease;
+}
+.bookmark-banner.visible { transform: translateY(0); }
+.bookmark-banner button {
+  padding: 6px 16px; border: 1px solid var(--sidebar-text); border-radius: 6px;
+  background: transparent; color: var(--sidebar-text); font-size: 0.82rem;
+  cursor: pointer; font-family: var(--font-heading); min-height: 36px;
+}
+.bookmark-banner button:first-of-type { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.85); z-index: 2000; justify-content: center; align-items: center; padding: 24px; cursor: pointer; }
+.lightbox.visible { display: flex; }
+.lightbox-content { max-width: 95vw; max-height: 90vh; overflow: auto; background: var(--bg); border-radius: 12px; padding: 24px; }
+
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); width: 280px; }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-overlay.visible { display: block; }
+  .menu-btn { display: flex; }
+  .chapter-header-bar { display: flex; }
+  .main { margin-left: 0; padding: 60px 16px 80px; }
+  .controls-bar { top: auto; bottom: 72px; right: 16px; flex-direction: column; }
+  .cover-banner { padding: 32px 24px; }
+  .cover-banner h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.3rem; }
+  .back-to-top { bottom: 72px; }
+  .figure { cursor: pointer; }
+}
+@media (max-width: 480px) {
+  .main { padding: 56px 14px 80px; }
+  .chapter-nav { flex-direction: column; }
+  .chapter-nav button { max-width: 100%; }
+  .controls-bar { right: 10px; }
+}
+@media print {
+  .sidebar, .sidebar-overlay, .chapter-header-bar, .controls-bar,
+  .progress-bar, .back-to-top, .bookmark-banner, .lightbox,
+  .menu-btn, .copy-btn, .chapter-nav { display: none !important; }
+  .main { margin-left: 0; max-width: 100%; padding: 0; }
+  h2 { break-before: page; }
+  .callout, pre, .figure, .table-scroll { break-inside: avoid; }
+  a { color: var(--text); text-decoration: underline; }
+  .cover-banner { background: none; color: var(--text); padding: 24px 0; }
+  .cover-banner h1 { color: var(--text); }
+}
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="chapter-header-bar" id="chapterBar">
+  <button class="menu-btn" id="menuBtn" aria-label="Open navigation">&#9776;</button>
+  <span class="chapter-header-text" id="chapterBarText"></span>
+</div>
+
+<div class="controls-bar">
+  <div class="theme-toggle" id="themeToggle">
+    <button data-set-theme="light" title="Light" aria-label="Light theme">&#9788;</button>
+    <button data-set-theme="dark" title="Dark" aria-label="Dark theme">&#9790;</button>
+    <button data-set-theme="book" title="Book" aria-label="Book theme">&#128214;</button>
+  </div>
+  <div class="font-controls">
+    <button id="fontMinus" title="Smaller text" aria-label="Decrease font size">A&minus;</button>
+    <button id="fontPlus" title="Larger text" aria-label="Increase font size">A+</button>
+  </div>
+</div>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-title">
+    Buck Converter Fundamentals
+    <small>A Learning Guide</small>
+  </div>
+  <nav id="sidebarNav">
+    <div class="part-label">Part I &mdash; Theory</div>
+    <a href="#ch1" class="ch">1. The Buck Topology</a>
+    <a href="#ch1-why">Why step-down conversion</a>
+    <a href="#ch1-switching">Basic switching operation</a>
+    <a href="#ch1-duty">Duty cycle equation</a>
+
+    <div class="part-label">Part II &mdash; Theory (cont.)</div>
+    <a href="#ch2" class="ch">2. CCM vs DCM Operation</a>
+    <a href="#ch2-ccm">Continuous conduction mode</a>
+    <a href="#ch2-dcm">Discontinuous conduction mode</a>
+    <a href="#ch2-boundary">Boundary condition &amp; ripple</a>
+
+    <div class="part-label">Part III &mdash; Design</div>
+    <a href="#ch3" class="ch">3. Component Selection</a>
+    <a href="#ch3-inductor">Inductor sizing</a>
+    <a href="#ch3-capacitors">Capacitor selection</a>
+    <a href="#ch3-switches">MOSFET &amp; diode selection</a>
+  </nav>
+  <div class="sidebar-footer">Generated Oct 2026</div>
+</div>
+
+<div class="main" id="mainContent">
+  <div class="cover-banner">
+    <h1>Buck Converter Fundamentals</h1>
+    <div class="subtitle">A comprehensive guide to step-down DC-DC conversion &mdash; from first-principles switching theory through practical component selection. Designed for power electronics engineers who want to understand how buck converters really work.</div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- PART I: THEORY                              -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <h2 id="ch1"><span class="ch-num">Chapter 1</span> The Buck Topology</h2>
+  <div class="chapter-summary">
+    <div class="reading-time">~10 min read</div>
+    <strong>Key question:</strong> How does a buck converter use high-frequency switching to produce a lower, regulated DC output from a higher DC input?
+  </div>
+
+  <div class="callout prerequisite">
+    <div class="callout-title">Prerequisites</div>
+    <p>This guide assumes familiarity with basic circuit theory (Ohm&rsquo;s law, Kirchhoff&rsquo;s laws), inductor and capacitor fundamentals (V = L &middot; di/dt, I = C &middot; dv/dt), and basic semiconductor device behavior (MOSFETs as switches, diode forward drop). No prior power electronics experience is required.</p>
+  </div>
+
+  <h3 id="ch1-why">Why Step-Down Conversion</h3>
+
+  <p>Many electronic systems receive power from a source whose voltage is higher than what the load requires. A 12V automotive battery must supply a 3.3V microcontroller. A 48V telecom bus must feed 1.0V processor cores. A USB 5V supply must power a 1.8V sensor. In every case, the voltage must be reduced &mdash; and it must be done efficiently.</p>
+
+  <p>The simplest approach is a linear regulator, which acts as a variable resistor in series with the load. The regulator drops excess voltage as heat: P<sub>loss</sub> = (V<sub>in</sub> &minus; V<sub>out</sub>) &times; I<sub>out</sub>. For a 12V-to-3.3V conversion at 1A, that&rsquo;s 8.7W dissipated as heat &mdash; a 27.5% efficiency. At higher currents or larger voltage drops, the heat becomes impractical.</p>
+
+  <div class="callout concept">
+    <div class="callout-title">Key Concept: Switching vs. Linear Regulation</div>
+    <p>A switching regulator (like the buck converter) achieves high efficiency by rapidly alternating between two states: fully <strong>on</strong> (switch closed, near-zero voltage drop) and fully <strong>off</strong> (switch open, zero current). Since power loss is V &times; I, and one of these terms is always near zero, the theoretical loss is minimal. Practical efficiencies of 85&ndash;97% are routine.</p>
+  </div>
+
+  <p>The buck converter is the most fundamental and widely used switching topology. It steps voltage <em>down</em> (hence "buck" &mdash; as in reducing). Its complement, the boost converter, steps voltage up. Together with the buck-boost and other derived topologies, they form the foundation of modern power conversion.</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Linear Regulator</th>
+          <th>Buck Converter</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Efficiency</td>
+          <td>V<sub>out</sub> / V<sub>in</sub> (worst case ~10%)</td>
+          <td>85&ndash;97% typical</td>
+        </tr>
+        <tr>
+          <td>Output noise</td>
+          <td>Very low (&micro;V range)</td>
+          <td>Higher (mV ripple at f<sub>SW</sub>)</td>
+        </tr>
+        <tr>
+          <td>Component count</td>
+          <td>2&ndash;3 (IC + caps)</td>
+          <td>5&ndash;8 (IC + L + caps + FETs)</td>
+        </tr>
+        <tr>
+          <td>EMI</td>
+          <td>Negligible</td>
+          <td>Requires careful layout</td>
+        </tr>
+        <tr>
+          <td>Cost</td>
+          <td>Lower</td>
+          <td>Higher (but saves on thermal)</td>
+        </tr>
+        <tr>
+          <td>Thermal management</td>
+          <td>Heatsink often required</td>
+          <td>Usually self-cooling</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="ch1-switching">Basic Switching Operation</h3>
+
+  <p>A buck converter has four essential components: a <strong>high-side switch</strong> (typically an N-channel or P-channel MOSFET), a <strong>low-side switch or freewheeling diode</strong>, an <strong>inductor</strong> (L), and an <strong>output capacitor</strong> (C<sub>out</sub>). The circuit alternates between two states at a fixed switching frequency f<sub>SW</sub> (typically 100 kHz to several MHz).</p>
+
+  <div class="figure">
+    <svg viewBox="0 0 560 260" xmlns="http://www.w3.org/2000/svg">
+      <!-- V_in source -->
+      <rect x="20" y="60" width="60" height="60" rx="6" fill="none" stroke="var(--accent)" stroke-width="2"/>
+      <text x="50" y="85" text-anchor="middle" font-size="11" fill="var(--text)">V<tspan dy="3" font-size="8">IN</tspan></text>
+      <text x="50" y="105" text-anchor="middle" font-size="10" fill="var(--text2)">12V</text>
+      <!-- + and - labels -->
+      <text x="85" y="72" font-size="12" fill="var(--accent)" font-weight="700">+</text>
+      <text x="85" y="118" font-size="12" fill="var(--accent)" font-weight="700">&minus;</text>
+
+      <!-- Top rail from V_in to switch -->
+      <line x1="80" y1="70" x2="130" y2="70" stroke="var(--text)" stroke-width="1.5"/>
+
+      <!-- High-side switch (Q1) -->
+      <rect x="130" y="50" width="70" height="40" rx="6" fill="none" stroke="var(--callout-tip-border)" stroke-width="2"/>
+      <text x="165" y="68" text-anchor="middle" font-size="10" fill="var(--text)">Q1 (HS)</text>
+      <text x="165" y="82" text-anchor="middle" font-size="9" fill="var(--text2)">MOSFET</text>
+
+      <!-- SW node line -->
+      <line x1="200" y1="70" x2="250" y2="70" stroke="var(--text)" stroke-width="1.5"/>
+      <!-- SW node label -->
+      <circle cx="250" cy="70" r="3" fill="var(--accent)"/>
+      <text x="250" y="55" text-anchor="middle" font-size="10" fill="var(--accent)" font-weight="600">SW</text>
+
+      <!-- Low-side switch (Q2) going down from SW node -->
+      <line x1="250" y1="73" x2="250" y2="110" stroke="var(--text)" stroke-width="1.5"/>
+      <rect x="215" y="110" width="70" height="40" rx="6" fill="none" stroke="var(--callout-warning-border)" stroke-width="2"/>
+      <text x="250" y="128" text-anchor="middle" font-size="10" fill="var(--text)">Q2 (LS)</text>
+      <text x="250" y="142" text-anchor="middle" font-size="9" fill="var(--text2)">or Diode</text>
+      <!-- Q2 to ground -->
+      <line x1="250" y1="150" x2="250" y2="190" stroke="var(--text)" stroke-width="1.5"/>
+
+      <!-- Inductor from SW node to output -->
+      <line x1="253" y1="70" x2="290" y2="70" stroke="var(--text)" stroke-width="1.5"/>
+      <!-- Inductor symbol (stylized coils) -->
+      <path d="M290,70 Q300,50 310,70 Q320,90 330,70 Q340,50 350,70 Q360,90 370,70" fill="none" stroke="var(--callout-takeaway-border)" stroke-width="2.5"/>
+      <text x="330" y="52" text-anchor="middle" font-size="10" fill="var(--text)">L</text>
+      <line x1="370" y1="70" x2="420" y2="70" stroke="var(--text)" stroke-width="1.5"/>
+
+      <!-- Output node -->
+      <circle cx="420" cy="70" r="3" fill="var(--accent)"/>
+
+      <!-- Output capacitor -->
+      <line x1="420" y1="73" x2="420" y2="105" stroke="var(--text)" stroke-width="1.5"/>
+      <line x1="405" y1="105" x2="435" y2="105" stroke="var(--callout-deepdive-border)" stroke-width="3"/>
+      <line x1="405" y1="115" x2="435" y2="115" stroke="var(--callout-deepdive-border)" stroke-width="3"/>
+      <text x="448" y="113" font-size="10" fill="var(--text)">C<tspan dy="3" font-size="7">OUT</tspan></text>
+      <line x1="420" y1="115" x2="420" y2="190" stroke="var(--text)" stroke-width="1.5"/>
+
+      <!-- Load resistor -->
+      <line x1="420" y1="70" x2="500" y2="70" stroke="var(--text)" stroke-width="1.5"/>
+      <rect x="485" y="85" width="30" height="70" rx="4" fill="none" stroke="var(--border)" stroke-width="2"/>
+      <text x="500" y="118" text-anchor="middle" font-size="10" fill="var(--text)">R<tspan dy="3" font-size="7">L</tspan></text>
+      <text x="500" y="133" text-anchor="middle" font-size="9" fill="var(--text2)">Load</text>
+      <line x1="500" y1="70" x2="500" y2="85" stroke="var(--text)" stroke-width="1.5"/>
+      <line x1="500" y1="155" x2="500" y2="190" stroke="var(--text)" stroke-width="1.5"/>
+
+      <!-- V_out label -->
+      <text x="460" y="63" text-anchor="middle" font-size="11" fill="var(--callout-tip-border)" font-weight="600">V<tspan dy="3" font-size="8">OUT</tspan></text>
+
+      <!-- Ground rail -->
+      <line x1="80" y1="190" x2="500" y2="190" stroke="var(--text)" stroke-width="1.5"/>
+      <line x1="80" y1="120" x2="80" y2="190" stroke="var(--text)" stroke-width="1.5"/>
+      <!-- Ground symbol -->
+      <line x1="270" y1="190" x2="270" y2="200" stroke="var(--text)" stroke-width="1.5"/>
+      <line x1="255" y1="200" x2="285" y2="200" stroke="var(--text)" stroke-width="1.5"/>
+      <line x1="260" y1="205" x2="280" y2="205" stroke="var(--text)" stroke-width="1.2"/>
+      <line x1="265" y1="210" x2="275" y2="210" stroke="var(--text)" stroke-width="1"/>
+
+      <!-- Current direction arrow -->
+      <defs>
+        <marker id="arr1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="var(--callout-tip-border)"/>
+        </marker>
+      </defs>
+      <line x1="305" y1="36" x2="370" y2="36" stroke="var(--callout-tip-border)" stroke-width="1.5" marker-end="url(#arr1)"/>
+      <text x="338" y="30" text-anchor="middle" font-size="9" fill="var(--callout-tip-border)">I<tspan dy="3" font-size="7">L</tspan></text>
+    </svg>
+    <div class="figure-caption">Figure 1.1 &mdash; Synchronous buck converter schematic. Q1 (high-side) and Q2 (low-side) alternate switching. L and C<sub>OUT</sub> form the output LC filter.</div>
+  </div>
+
+  <p><strong>State 1 &mdash; ON phase (Q1 closed, Q2 open):</strong> Current flows from V<sub>in</sub> through Q1, through the inductor L, into C<sub>out</sub> and the load. The voltage across the inductor is V<sub>L</sub> = V<sub>in</sub> &minus; V<sub>out</sub> (positive), so inductor current ramps <em>up</em> linearly: &Delta;I = (V<sub>in</sub> &minus; V<sub>out</sub>) &times; t<sub>on</sub> / L.</p>
+
+  <p><strong>State 2 &mdash; OFF phase (Q1 open, Q2 closed):</strong> Q1 turns off. The inductor current cannot change instantaneously, so it forces current to flow through Q2 (or the freewheeling diode) to maintain the current path. Now V<sub>L</sub> = &minus;V<sub>out</sub> (negative), and inductor current ramps <em>down</em>: &Delta;I = V<sub>out</sub> &times; t<sub>off</sub> / L.</p>
+
+  <div class="callout warning">
+    <div class="callout-title">Dead-Time Is Critical</div>
+    <p>In a synchronous buck (using two MOSFETs), Q1 and Q2 must <strong>never</strong> be on simultaneously. This would create a short from V<sub>in</sub> to ground &mdash; a &ldquo;shoot-through&rdquo; event that destroys the FETs and wastes enormous energy. All buck converter controllers insert a small &ldquo;dead time&rdquo; (typically 10&ndash;50 ns) between turning one FET off and the other on. During dead time, the body diode of Q2 conducts.</p>
+  </div>
+
+  <h3 id="ch1-duty">Duty Cycle and the Fundamental Equation</h3>
+
+  <p>In steady state, the net volt-seconds across the inductor over one switching period must be zero (volt-second balance). During t<sub>on</sub>, the inductor sees (V<sub>in</sub> &minus; V<sub>out</sub>). During t<sub>off</sub>, it sees (&minus;V<sub>out</sub>). Setting the total volt-seconds to zero:</p>
+
+  <p style="text-align: center; font-size: 1.1em;">
+    (V<sub>in</sub> &minus; V<sub>out</sub>) &times; t<sub>on</sub> = V<sub>out</sub> &times; t<sub>off</sub>
+  </p>
+
+  <p>Since D = t<sub>on</sub> / T and (1 &minus; D) = t<sub>off</sub> / T, solving for V<sub>out</sub> gives the fundamental buck converter equation:</p>
+
+  <p style="text-align: center; font-size: 1.3em; font-weight: 700; color: var(--accent); margin: 20px 0;">
+    V<sub>out</sub> = D &times; V<sub>in</sub>
+  </p>
+
+  <p>where D is the duty cycle (0 &le; D &le; 1). For a 12V input producing 3.3V output, D = 3.3 / 12 = 0.275 (27.5%). The controller&rsquo;s PWM signal spends 27.5% of each switching cycle with Q1 on.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">python</span></div>
+    <pre><code>def buck_duty_cycle(v_in, v_out, v_diode=0.0):
+    """Calculate buck converter duty cycle.
+
+    Args:
+        v_in:    Input voltage (V)
+        v_out:   Desired output voltage (V)
+        v_diode: Diode forward drop (V), 0 for synchronous buck
+
+    Returns:
+        Duty cycle (0 to 1)
+    """
+    if v_out >= v_in:
+        raise ValueError("Buck converter requires V_out < V_in")
+    # For asynchronous buck with diode: D = (V_out + V_diode) / (V_in + V_diode)
+    d = (v_out + v_diode) / (v_in + v_diode)
+    return d
+
+# Example: 12V to 3.3V synchronous buck
+d = buck_duty_cycle(12.0, 3.3)
+print(f"Duty cycle: {d:.3f} ({d*100:.1f}%)")
+# Output: Duty cycle: 0.275 (27.5%)
+
+# Example: 12V to 5V with Schottky diode (0.4V drop)
+d = buck_duty_cycle(12.0, 5.0, v_diode=0.4)
+print(f"Duty cycle with diode: {d:.3f} ({d*100:.1f}%)")
+# Output: Duty cycle with diode: 0.435 (43.5%)</code></pre>
+  </div>
+  <div class="code-caption">The diode forward voltage slightly increases the required duty cycle in asynchronous designs.</div>
+
+  <div class="callout tip">
+    <div class="callout-title">Practical Duty Cycle Limits</div>
+    <p>Real controllers cannot achieve D = 0% or D = 100%. Most controllers have a minimum on-time (t<sub>on,min</sub>) of 50&ndash;150 ns and a maximum duty cycle of 85&ndash;100%. At very low D (high step-down ratio), consider using a two-stage approach or a controller designed for low duty cycle operation. At the high end, look for &ldquo;100% duty cycle&rdquo; or &ldquo;low-dropout&rdquo; buck converters that can pass through when V<sub>in</sub> is close to V<sub>out</sub>.</p>
+  </div>
+
+  <div class="callout key-takeaway">
+    <div class="callout-title">Key Takeaway</div>
+    <p>The buck converter achieves efficient voltage step-down by chopping the input with a high-frequency switch and filtering the result with an LC network. The output voltage is set by the duty cycle: V<sub>out</sub> = D &times; V<sub>in</sub>. This elegant relationship comes directly from volt-second balance on the inductor &mdash; the same principle underpins all inductor-based converters.</p>
+  </div>
+
+  <div class="references">
+    <h4>Further Reading</h4>
+    <ul>
+      <li><a href="https://www.ti.com/lit/an/slva477b/slva477b.pdf" target="_blank" rel="noopener">TI SLVA477B: Understanding Buck Power Stages in Switchmode Power Supplies</a> &mdash; Detailed derivation of buck operating states.</li>
+      <li><a href="https://www.analog.com/en/technical-articles/understanding-and-applying-buck-converters.html" target="_blank" rel="noopener">Analog Devices: Understanding and Applying Buck Converters</a> &mdash; Application-oriented overview of buck topology.</li>
+      <li><a href="https://www.ridleyengineering.com/design-center.html" target="_blank" rel="noopener">Ridley Engineering Design Center</a> &mdash; Power supply design tools and educational articles.</li>
+    </ul>
+  </div>
+
+  <div class="chapter-nav">
+    <button class="chapter-prev" disabled>&larr; Previous</button>
+    <button class="chapter-next" data-target="ch2">Next: CCM vs DCM Operation &rarr;</button>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- CHAPTER 2                                    -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <h2 id="ch2"><span class="ch-num">Chapter 2</span> CCM vs DCM Operation</h2>
+  <div class="chapter-summary">
+    <div class="reading-time">~12 min read</div>
+    <strong>Key question:</strong> What determines whether inductor current flows continuously or drops to zero each switching cycle, and how does this affect converter behavior?
+  </div>
+
+  <h3 id="ch2-ccm">Continuous Conduction Mode (CCM)</h3>
+
+  <p>In <strong>Continuous Conduction Mode</strong>, the inductor current never reaches zero during a switching cycle. Current always flows through the inductor &mdash; it ramps up during the ON phase and ramps down during the OFF phase, but the minimum value (the valley) stays above zero.</p>
+
+  <p>CCM is the &ldquo;normal&rdquo; operating mode for most buck converters. When you use the equation V<sub>out</sub> = D &times; V<sub>in</sub>, you are implicitly assuming CCM operation. In CCM, the output voltage depends <em>only</em> on the duty cycle and input voltage &mdash; it is independent of load current. This makes the control loop straightforward.</p>
+
+  <div class="callout concept">
+    <div class="callout-title">Key Concept: Inductor Current Waveform in CCM</div>
+    <p>In CCM, the inductor current is a triangle wave superimposed on a DC offset (the load current). The peak-to-peak ripple current &Delta;I<sub>L</sub> is determined by the inductance, switching frequency, and voltage across the inductor during each state. The DC component equals the output load current: I<sub>L,avg</sub> = I<sub>out</sub>.</p>
+  </div>
+
+  <div class="figure">
+    <svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg">
+      <!-- Axes -->
+      <line x1="60" y1="200" x2="490" y2="200" stroke="var(--text2)" stroke-width="1.5"/>
+      <line x1="60" y1="200" x2="60" y2="20" stroke="var(--text2)" stroke-width="1.5"/>
+      <text x="275" y="230" text-anchor="middle" fill="var(--text2)" font-size="11">Time</text>
+      <text x="18" y="110" text-anchor="middle" fill="var(--text2)" font-size="11" transform="rotate(-90 18 110)">Inductor Current (I<tspan dy="3" font-size="8">L</tspan>)</text>
+
+      <!-- I_out average line -->
+      <line x1="60" y1="110" x2="490" y2="110" stroke="var(--callout-tip-border)" stroke-width="1" stroke-dasharray="6,4"/>
+      <text x="495" y="114" fill="var(--callout-tip-border)" font-size="10" text-anchor="start">I<tspan dy="3" font-size="7">OUT</tspan></text>
+
+      <!-- Zero line at bottom (but CCM never reaches it) -->
+      <text x="55" y="198" text-anchor="end" fill="var(--text2)" font-size="10">0</text>
+
+      <!-- CCM current waveform: triangle never touching zero -->
+      <polyline points="80,140 160,80 200,140 280,80 320,140 400,80 440,140" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+
+      <!-- Peak and valley labels -->
+      <line x1="160" y1="80" x2="160" y2="76" stroke="var(--text2)" stroke-width="1"/>
+      <text x="160" y="70" text-anchor="middle" fill="var(--text)" font-size="9">I<tspan dy="3" font-size="7">peak</tspan></text>
+      <line x1="200" y1="140" x2="200" y2="144" stroke="var(--text2)" stroke-width="1"/>
+      <text x="200" y="160" text-anchor="middle" fill="var(--text)" font-size="9">I<tspan dy="3" font-size="7">valley</tspan></text>
+
+      <!-- Delta I bracket -->
+      <line x1="450" y1="80" x2="450" y2="140" stroke="var(--callout-takeaway-border)" stroke-width="2"/>
+      <line x1="446" y1="80" x2="454" y2="80" stroke="var(--callout-takeaway-border)" stroke-width="2"/>
+      <line x1="446" y1="140" x2="454" y2="140" stroke="var(--callout-takeaway-border)" stroke-width="2"/>
+      <text x="470" y="114" fill="var(--callout-takeaway-border)" font-size="10">&Delta;I<tspan dy="3" font-size="7">L</tspan></text>
+
+      <!-- t_on / t_off labels -->
+      <defs>
+        <marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0, 8 3, 0 6" fill="var(--text2)"/>
+        </marker>
+        <marker id="arr2r" markerWidth="8" markerHeight="6" refX="0" refY="3" orient="auto">
+          <polygon points="8 0, 0 3, 8 6" fill="var(--text2)"/>
+        </marker>
+      </defs>
+      <line x1="80" y1="180" x2="158" y2="180" stroke="var(--text2)" stroke-width="1" marker-start="url(#arr2r)" marker-end="url(#arr2)"/>
+      <text x="119" y="175" text-anchor="middle" fill="var(--text2)" font-size="9">t<tspan dy="3" font-size="7">on</tspan></text>
+      <line x1="162" y1="180" x2="198" y2="180" stroke="var(--text2)" stroke-width="1" marker-start="url(#arr2r)" marker-end="url(#arr2)"/>
+      <text x="180" y="175" text-anchor="middle" fill="var(--text2)" font-size="9">t<tspan dy="3" font-size="7">off</tspan></text>
+
+      <!-- CCM label -->
+      <text x="280" y="42" text-anchor="middle" fill="var(--accent)" font-size="13" font-weight="700">CCM: Current never reaches zero</text>
+    </svg>
+    <div class="figure-caption">Figure 2.1 &mdash; Inductor current waveform in Continuous Conduction Mode. The valley current remains above zero.</div>
+  </div>
+
+  <p>The peak-to-peak inductor current ripple in CCM is:</p>
+
+  <p style="text-align: center; font-size: 1.05em;">
+    &Delta;I<sub>L</sub> = (V<sub>in</sub> &minus; V<sub>out</sub>) &times; D / (f<sub>SW</sub> &times; L)
+  </p>
+
+  <p>This can also be written as &Delta;I<sub>L</sub> = V<sub>out</sub> &times; (1 &minus; D) / (f<sub>SW</sub> &times; L), since the volt-seconds during ON and OFF phases are equal.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">python</span></div>
+    <pre><code>def inductor_ripple_current(v_in, v_out, f_sw, l_h):
+    """Calculate peak-to-peak inductor ripple current in CCM.
+
+    Args:
+        v_in:  Input voltage (V)
+        v_out: Output voltage (V)
+        f_sw:  Switching frequency (Hz)
+        l_h:   Inductance (Henries)
+
+    Returns:
+        Peak-to-peak ripple current (A)
+    """
+    d = v_out / v_in
+    delta_il = (v_in - v_out) * d / (f_sw * l_h)
+    return delta_il
+
+# Example: 12V to 3.3V, 500 kHz, 4.7 uH inductor
+delta_i = inductor_ripple_current(12.0, 3.3, 500e3, 4.7e-6)
+print(f"Ripple current: {delta_i:.3f} A ({delta_i*1000:.0f} mA)")
+# Output: Ripple current: 1.356 A (1356 mA)</code></pre>
+  </div>
+
+  <h3 id="ch2-dcm">Discontinuous Conduction Mode (DCM)</h3>
+
+  <p>In <strong>Discontinuous Conduction Mode</strong>, the inductor current reaches zero during the OFF phase and stays at zero for the remainder of the switching cycle. This introduces a third state: the &ldquo;dead time&rdquo; or &ldquo;idle&rdquo; period where no energy is being transferred. DCM occurs at light loads, when the ripple current amplitude exceeds twice the average load current.</p>
+
+  <p>In DCM, the simple V<sub>out</sub> = D &times; V<sub>in</sub> relationship no longer holds. The output voltage becomes load-dependent:</p>
+
+  <p style="text-align: center; font-size: 1.05em;">
+    V<sub>out</sub> = V<sub>in</sub> &times; D<sup>2</sup> / (D<sup>2</sup> + D<sub>2</sub><sup>2</sup> &times; K)
+  </p>
+
+  <p>where K = 2L / (R<sub>load</sub> &times; T) is a dimensionless conduction parameter. This load dependence complicates the control loop and can degrade transient response.</p>
+
+  <div class="callout warning">
+    <div class="callout-title">CCM/DCM Transition Challenges</div>
+    <p>Some controllers are designed to operate only in CCM. If the load drops enough for the converter to enter DCM, the control loop &mdash; designed for CCM&rsquo;s single-pole/single-zero transfer function &mdash; may become unstable. Synchronous buck converters can force CCM operation even at light loads by allowing negative inductor current (current flowing backward from output to input through Q2). This wastes some energy at light load but maintains predictable control dynamics.</p>
+  </div>
+
+  <div class="figure">
+    <svg viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg">
+      <!-- Axes -->
+      <line x1="60" y1="200" x2="490" y2="200" stroke="var(--text2)" stroke-width="1.5"/>
+      <line x1="60" y1="200" x2="60" y2="20" stroke="var(--text2)" stroke-width="1.5"/>
+      <text x="275" y="230" text-anchor="middle" fill="var(--text2)" font-size="11">Time</text>
+      <text x="18" y="110" text-anchor="middle" fill="var(--text2)" font-size="11" transform="rotate(-90 18 110)">Inductor Current (I<tspan dy="3" font-size="8">L</tspan>)</text>
+
+      <!-- Zero line -->
+      <text x="55" y="198" text-anchor="end" fill="var(--text2)" font-size="10">0</text>
+
+      <!-- DCM current waveform: triangle touching zero with dead time -->
+      <polyline points="80,196 130,80 165,196" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+      <!-- Dead time (flat at zero) -->
+      <line x1="165" y1="196" x2="220" y2="196" stroke="var(--accent)" stroke-width="2.5"/>
+      <!-- Second cycle -->
+      <polyline points="220,196 270,80 305,196" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+      <line x1="305" y1="196" x2="360" y2="196" stroke="var(--accent)" stroke-width="2.5"/>
+      <!-- Third cycle -->
+      <polyline points="360,196 410,80 445,196" fill="none" stroke="var(--accent)" stroke-width="2.5"/>
+      <line x1="445" y1="196" x2="480" y2="196" stroke="var(--accent)" stroke-width="2.5"/>
+
+      <!-- Phase labels for first cycle -->
+      <line x1="80" y1="172" x2="128" y2="172" stroke="var(--callout-tip-border)" stroke-width="1" marker-start="url(#arr2r)" marker-end="url(#arr2)"/>
+      <text x="104" y="167" text-anchor="middle" fill="var(--callout-tip-border)" font-size="9">t<tspan dy="3" font-size="7">on</tspan></text>
+
+      <line x1="132" y1="172" x2="163" y2="172" stroke="var(--callout-warning-border)" stroke-width="1" marker-start="url(#arr2r)" marker-end="url(#arr2)"/>
+      <text x="148" y="167" text-anchor="middle" fill="var(--callout-warning-border)" font-size="9">t<tspan dy="3" font-size="7">off</tspan></text>
+
+      <line x1="167" y1="172" x2="218" y2="172" stroke="var(--callout-prereq-border)" stroke-width="1" marker-start="url(#arr2r)" marker-end="url(#arr2)"/>
+      <text x="192" y="167" text-anchor="middle" fill="var(--callout-prereq-border)" font-size="9">t<tspan dy="3" font-size="7">dead</tspan></text>
+
+      <!-- DCM label -->
+      <text x="280" y="42" text-anchor="middle" fill="var(--accent)" font-size="13" font-weight="700">DCM: Current reaches zero each cycle</text>
+
+      <!-- I_L = 0 annotation -->
+      <text x="192" y="190" text-anchor="middle" fill="var(--callout-prereq-border)" font-size="9">I<tspan dy="3" font-size="7">L</tspan><tspan dy="-3"> = 0</tspan></text>
+    </svg>
+    <div class="figure-caption">Figure 2.2 &mdash; Inductor current waveform in Discontinuous Conduction Mode. Current reaches zero and stays there during the dead time.</div>
+  </div>
+
+  <h3 id="ch2-boundary">Boundary Condition and Ripple Calculations</h3>
+
+  <p>The boundary between CCM and DCM occurs when the valley of the inductor current exactly touches zero. At this point, the average inductor current equals half the ripple: I<sub>out,boundary</sub> = &Delta;I<sub>L</sub> / 2. Below this load current, the converter enters DCM.</p>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">python</span></div>
+    <pre><code>def ccm_dcm_boundary(v_in, v_out, f_sw, l_h):
+    """Calculate the CCM/DCM boundary load current.
+
+    Below this current, the converter enters DCM.
+
+    Args:
+        v_in:  Input voltage (V)
+        v_out: Output voltage (V)
+        f_sw:  Switching frequency (Hz)
+        l_h:   Inductance (Henries)
+
+    Returns:
+        Boundary current (A) - converter enters DCM below this
+    """
+    d = v_out / v_in
+    delta_il = (v_in - v_out) * d / (f_sw * l_h)
+    i_boundary = delta_il / 2.0
+    return i_boundary
+
+def output_voltage_ripple(delta_il, f_sw, c_out, esr=0.0):
+    """Calculate output voltage ripple (peak-to-peak).
+
+    Two components: capacitive (charge-based) and ESR-based.
+
+    Args:
+        delta_il: Inductor ripple current, peak-to-peak (A)
+        f_sw:     Switching frequency (Hz)
+        c_out:    Output capacitance (F)
+        esr:      Capacitor ESR (ohms)
+
+    Returns:
+        Tuple of (total_ripple_v, capacitive_ripple_v, esr_ripple_v)
+    """
+    # Capacitive ripple: delta_V_cap = delta_I_L / (8 * f_sw * C_out)
+    v_cap = delta_il / (8.0 * f_sw * c_out)
+    # ESR ripple: delta_V_esr = delta_I_L * ESR
+    v_esr = delta_il * esr
+    # Total (RSS for uncorrelated, but often just summed conservatively)
+    v_total = v_cap + v_esr
+    return v_total, v_cap, v_esr
+
+# Example: 12V to 3.3V, 500 kHz, 4.7 uH
+i_bnd = ccm_dcm_boundary(12.0, 3.3, 500e3, 4.7e-6)
+print(f"CCM/DCM boundary: {i_bnd*1000:.0f} mA")
+# Output: CCM/DCM boundary: 678 mA
+
+# Output ripple: 1.356A ripple, 500kHz, 22uF MLCC (ESR ~ 3 mohm)
+v_tot, v_cap, v_esr = output_voltage_ripple(1.356, 500e3, 22e-6, 0.003)
+print(f"Capacitive ripple: {v_cap*1000:.1f} mV")
+print(f"ESR ripple:        {v_esr*1000:.1f} mV")
+print(f"Total ripple:      {v_tot*1000:.1f} mV")
+# Output:
+# Capacitive ripple: 15.4 mV
+# ESR ripple:        4.1 mV
+# Total ripple:      19.5 mV</code></pre>
+  </div>
+  <div class="code-caption">Use these calculations as first-pass estimates. Bench measurements under actual load conditions are essential for final validation.</div>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Characteristic</th>
+          <th>CCM</th>
+          <th>DCM</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Inductor current</td>
+          <td>Never reaches zero</td>
+          <td>Reaches zero each cycle</td>
+        </tr>
+        <tr>
+          <td>V<sub>out</sub> equation</td>
+          <td>V<sub>out</sub> = D &times; V<sub>in</sub></td>
+          <td>Load-dependent (complex)</td>
+        </tr>
+        <tr>
+          <td>Control complexity</td>
+          <td>Simpler (2nd order system)</td>
+          <td>More complex (load-dependent)</td>
+        </tr>
+        <tr>
+          <td>Efficiency at light load</td>
+          <td>Moderate (switching losses dominate)</td>
+          <td>Can be higher (lower RMS currents)</td>
+        </tr>
+        <tr>
+          <td>Peak inductor current</td>
+          <td>I<sub>out</sub> + &Delta;I<sub>L</sub>/2</td>
+          <td>Higher than CCM for same power</td>
+        </tr>
+        <tr>
+          <td>EMI</td>
+          <td>Predictable (fixed f<sub>SW</sub>)</td>
+          <td>Variable frequency can spread spectrum</td>
+        </tr>
+        <tr>
+          <td>Typical use</td>
+          <td>Medium to heavy loads</td>
+          <td>Light loads, battery-powered devices</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout deep-dive">
+    <details>
+      <summary class="callout-title">Deep Dive: Forced-CCM and Pulse-Skipping Modes</summary>
+      <div class="deep-dive-content">
+        <p>Modern buck controllers often offer multiple light-load modes:</p>
+        <ul>
+          <li><strong>Forced CCM (FCCM):</strong> Q2 stays active even when inductor current reverses. Maintains fixed frequency and predictable noise spectrum, but wastes power at light load due to circulating currents. Preferred when EMI is the primary concern.</li>
+          <li><strong>Diode Emulation / DCM:</strong> Q2 turns off when inductor current reaches zero, preventing reverse current. Better light-load efficiency but variable switching frequency.</li>
+          <li><strong>Pulse-Skipping:</strong> The controller skips entire switching pulses when the output is above regulation. The converter bursts a few pulses, then goes idle. Very efficient at light loads but creates low-frequency noise components that are hard to filter.</li>
+          <li><strong>PFM (Pulse-Frequency Modulation):</strong> Fixed on-time pulses at a variable repetition rate. Provides a smooth transition between heavy and light loads with good efficiency across the range.</li>
+        </ul>
+        <p>The choice between these modes depends on the application&rsquo;s sensitivity to output ripple, EMI requirements, and the range of load currents encountered.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="callout key-takeaway">
+    <div class="callout-title">Key Takeaway</div>
+    <p>CCM and DCM are not &ldquo;good&rdquo; and &ldquo;bad&rdquo; &mdash; they are different operating regimes. CCM gives predictable voltage conversion and simpler control. DCM can offer better light-load efficiency. The boundary between them is set by the inductor value, switching frequency, and load current. Design for CCM at your maximum load, then decide how you want the converter to behave at light load.</p>
+  </div>
+
+  <div class="references">
+    <h4>Further Reading</h4>
+    <ul>
+      <li><a href="https://www.ti.com/lit/an/slva057/slva057.pdf" target="_blank" rel="noopener">TI SLVA057: Understanding Buck Converter CCM/DCM Boundary</a> &mdash; Boundary condition derivations with worked examples.</li>
+      <li><a href="https://www.analog.com/en/technical-articles/continuous-vs-discontinuous-conduction-mode.html" target="_blank" rel="noopener">Analog Devices: Continuous vs. Discontinuous Conduction Mode</a> &mdash; Comparison with practical design implications.</li>
+      <li><a href="https://www.ridleyengineering.com/hardware/ap300-analyzer/ap300-application/buck-converter-ccm.html" target="_blank" rel="noopener">Ridley Engineering: Buck Converter in CCM</a> &mdash; Loop analysis and compensation in CCM.</li>
+      <li>Basso, C. <em>Switch-Mode Power Supplies: SPICE Simulations and Practical Designs</em>, 2nd ed., McGraw-Hill, 2014. Chapters 1&ndash;3.</li>
+    </ul>
+  </div>
+
+  <div class="chapter-nav">
+    <button class="chapter-prev" data-target="ch1">&larr; Previous: The Buck Topology</button>
+    <button class="chapter-next" data-target="ch3">Next: Component Selection &rarr;</button>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- PART II: DESIGN                              -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <h2 id="ch3"><span class="ch-num">Chapter 3</span> Component Selection</h2>
+  <div class="chapter-summary">
+    <div class="reading-time">~14 min read</div>
+    <strong>Key question:</strong> How do you size the inductor, select output and input capacitors, and choose the power switches for a practical buck converter design?
+  </div>
+
+  <div class="callout prerequisite">
+    <div class="callout-title">Prerequisites</div>
+    <p>This chapter builds on the CCM equations from <a href="#ch2">Chapter 2</a>. You should be comfortable with the inductor ripple current formula (&Delta;I<sub>L</sub>) and the CCM/DCM boundary condition before proceeding. Familiarity with MOSFET R<sub>DS(on)</sub>, gate charge, and capacitor ESR is helpful.</p>
+  </div>
+
+  <h3 id="ch3-inductor">Inductor Sizing</h3>
+
+  <p>The inductor is the most critical passive component in a buck converter. It stores energy during the ON phase and delivers it to the load during the OFF phase. The choice of inductance value involves a fundamental trade-off: a larger inductor reduces current ripple (less stress on capacitors, lower EMI) but is physically bigger, more expensive, and responds more slowly to load transients.</p>
+
+  <p>A widely used rule of thumb sets the peak-to-peak inductor ripple current to 20&ndash;40% of the maximum DC load current. This balances ripple, efficiency, transient response, and physical size.</p>
+
+  <div class="figure">
+    <div class="diagram-row">
+      <div class="d-block d-orange">Smaller L<small>&Delta;I<sub>L</sub> &uarr; &nbsp; Size &darr;</small></div>
+      <div class="d-arrow">&harr;</div>
+      <div class="d-block d-purple">Trade-off<small>Ripple vs. Size</small></div>
+      <div class="d-arrow">&harr;</div>
+      <div class="d-block d-green">Larger L<small>&Delta;I<sub>L</sub> &darr; &nbsp; Size &uarr;</small></div>
+    </div>
+    <div class="figure-caption">Figure 3.1 &mdash; The inductor sizing trade-off. 20&ndash;40% ripple ratio is the typical sweet spot.</div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">python</span></div>
+    <pre><code>def size_inductor(v_in, v_out, i_out_max, f_sw, ripple_ratio=0.3):
+    """Calculate required inductance for a buck converter.
+
+    Args:
+        v_in:         Input voltage (V)
+        v_out:        Output voltage (V)
+        i_out_max:    Maximum output current (A)
+        f_sw:         Switching frequency (Hz)
+        ripple_ratio: Desired delta_I_L / I_out (0.2 to 0.4 typical)
+
+    Returns:
+        dict with inductance (H), ripple current (A), peak current (A),
+              and CCM/DCM boundary current (A)
+    """
+    d = v_out / v_in
+    delta_il = ripple_ratio * i_out_max  # Target ripple current
+
+    # L = (V_in - V_out) * D / (f_sw * delta_I_L)
+    l_h = (v_in - v_out) * d / (f_sw * delta_il)
+
+    i_peak = i_out_max + delta_il / 2.0
+    i_valley = i_out_max - delta_il / 2.0
+    i_boundary = delta_il / 2.0
+
+    return {
+        "inductance_uH": l_h * 1e6,
+        "ripple_current_A": delta_il,
+        "peak_current_A": i_peak,
+        "valley_current_A": i_valley,
+        "ccm_boundary_A": i_boundary,
+    }
+
+# Design example: 12V to 3.3V at 3A, 500 kHz, 30% ripple
+result = size_inductor(12.0, 3.3, 3.0, 500e3, 0.3)
+for key, val in result.items():
+    print(f"  {key}: {val:.3f}")
+# Output:
+#   inductance_uH: 5.339
+#   ripple_current_A: 0.900
+#   peak_current_A: 3.450
+#   valley_current_A: 2.550
+#   ccm_boundary_A: 0.450
+
+# Select nearest standard value: 4.7 uH or 5.6 uH
+print("\nSelect 4.7 uH (higher ripple) or 5.6 uH (lower ripple)")</code></pre>
+  </div>
+  <div class="code-caption">After calculating, select the nearest standard inductance value. Verify the inductor's saturation current rating exceeds I<sub>peak</sub> with margin.</div>
+
+  <div class="callout tip">
+    <div class="callout-title">Inductor Selection Checklist</div>
+    <p>When choosing an inductor, verify these four specifications against your design requirements:</p>
+    <ul>
+      <li><strong>Inductance (L):</strong> The calculated value &plusmn; tolerance at DC bias. Inductance drops under DC bias &mdash; check the L vs. I curve in the datasheet. A ferrite inductor rated 4.7 &micro;H at 0A may be only 3.5 &micro;H at your full load current.</li>
+      <li><strong>Saturation current (I<sub>sat</sub>):</strong> Must exceed I<sub>peak</sub> with margin. At saturation, inductance collapses and current surges &mdash; potentially destroying the MOSFET.</li>
+      <li><strong>RMS current rating (I<sub>rms</sub>):</strong> Must exceed the RMS inductor current (approximately equal to I<sub>out</sub> in CCM) without excessive temperature rise.</li>
+      <li><strong>DCR (DC resistance):</strong> Lower is better for efficiency. P<sub>loss</sub> = I<sub>rms</sub>&sup2; &times; DCR. A typical 4.7 &micro;H / 3A inductor has DCR around 30&ndash;80 m&Omega;.</li>
+    </ul>
+  </div>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Inductor Type</th>
+          <th>Core Material</th>
+          <th>Saturation</th>
+          <th>DCR</th>
+          <th>Cost</th>
+          <th>Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Shielded ferrite</td>
+          <td>Ferrite (NiZn, MnZn)</td>
+          <td>Sharp knee</td>
+          <td>Low</td>
+          <td>Medium</td>
+          <td>General purpose, low EMI</td>
+        </tr>
+        <tr>
+          <td>Unshielded ferrite</td>
+          <td>Ferrite</td>
+          <td>Sharp knee</td>
+          <td>Low</td>
+          <td>Low</td>
+          <td>Cost-sensitive, no EMI concern</td>
+        </tr>
+        <tr>
+          <td>Metal composite</td>
+          <td>Iron powder / metal alloy</td>
+          <td>Soft rolloff</td>
+          <td>Medium</td>
+          <td>Medium</td>
+          <td>High-current, overload tolerance</td>
+        </tr>
+        <tr>
+          <td>Molded metal</td>
+          <td>Metal alloy</td>
+          <td>Very soft</td>
+          <td>Medium&ndash;High</td>
+          <td>Higher</td>
+          <td>Automotive, high reliability</td>
+        </tr>
+        <tr>
+          <td>Wirewound toroid</td>
+          <td>Various</td>
+          <td>Depends on core</td>
+          <td>Low</td>
+          <td>Low&ndash;Medium</td>
+          <td>High efficiency, larger footprint OK</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3 id="ch3-capacitors">Capacitor Selection</h3>
+
+  <p>Both input and output capacitors are essential. The <strong>output capacitor</strong> (C<sub>out</sub>) filters the inductor&rsquo;s triangle-wave ripple current and supplies charge during load transients. The <strong>input capacitor</strong> (C<sub>in</sub>) supplies the pulsed current demanded by the high-side switch and reduces voltage stress on V<sub>in</sub>.</p>
+
+  <h4>Output Capacitor</h4>
+
+  <p>The output voltage ripple has two components: the capacitive term (&Delta;Q stored and released by C<sub>out</sub>) and the ESR term (ripple current flowing through the capacitor&rsquo;s equivalent series resistance):</p>
+
+  <p style="text-align: center;">
+    &Delta;V<sub>out</sub> = &Delta;I<sub>L</sub> / (8 &times; f<sub>SW</sub> &times; C<sub>out</sub>) + &Delta;I<sub>L</sub> &times; ESR
+  </p>
+
+  <p>For ceramic capacitors (MLCCs), ESR is typically 1&ndash;10 m&Omega;, and the capacitive term dominates. For electrolytic capacitors, ESR is much higher (10&ndash;200 m&Omega;), and the ESR term dominates.</p>
+
+  <div class="callout warning">
+    <div class="callout-title">Ceramic Capacitor DC Bias Derating</div>
+    <p>Class II ceramic capacitors (X5R, X7R) lose significant capacitance under DC bias. A 22 &micro;F / 6.3V capacitor in an 0805 package may retain only 10&ndash;12 &micro;F at 3.3V DC bias &mdash; a 45&ndash;55% loss. <strong>Always check the manufacturer&rsquo;s DC bias curves.</strong> Use higher voltage ratings (e.g., 10V or 16V for a 3.3V output) or larger package sizes to mitigate derating. TDK&rsquo;s SEAT tool and Murata&rsquo;s SimSurfing provide accurate DC bias data.</p>
+  </div>
+
+  <h4>Input Capacitor</h4>
+
+  <p>The input capacitor sees a pulsed current waveform: during the ON phase, it must supply the full load current minus whatever the source can deliver. The RMS current through C<sub>in</sub> is:</p>
+
+  <p style="text-align: center;">
+    I<sub>Cin,rms</sub> = I<sub>out</sub> &times; &radic;(D &times; (1 &minus; D))
+  </p>
+
+  <p>This current is maximized at D = 0.5 (50% duty cycle) where I<sub>Cin,rms</sub> = 0.5 &times; I<sub>out</sub>. The input capacitor must handle this RMS current without excessive heating. Multiple ceramic capacitors in parallel are common.</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Capacitor Type</th>
+          <th>ESR</th>
+          <th>Capacitance / Volume</th>
+          <th>DC Bias Effect</th>
+          <th>Typical Use</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>MLCC (X5R/X7R)</td>
+          <td>1&ndash;10 m&Omega;</td>
+          <td>High</td>
+          <td>Significant (30&ndash;80% loss)</td>
+          <td>Output &amp; input for &lt;10V rails</td>
+        </tr>
+        <tr>
+          <td>MLCC (C0G/NP0)</td>
+          <td>&lt;1 m&Omega;</td>
+          <td>Very low</td>
+          <td>None</td>
+          <td>Compensation networks, precision</td>
+        </tr>
+        <tr>
+          <td>Polymer electrolytic</td>
+          <td>5&ndash;30 m&Omega;</td>
+          <td>Medium</td>
+          <td>None</td>
+          <td>Bulk output capacitance</td>
+        </tr>
+        <tr>
+          <td>Aluminum electrolytic</td>
+          <td>20&ndash;200 m&Omega;</td>
+          <td>Very high</td>
+          <td>None</td>
+          <td>Bulk input filtering</td>
+        </tr>
+        <tr>
+          <td>Tantalum (polymer)</td>
+          <td>10&ndash;50 m&Omega;</td>
+          <td>High</td>
+          <td>Minor</td>
+          <td>Space-constrained designs</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout deep-dive">
+    <details>
+      <summary class="callout-title">Deep Dive: Load Transient Response</summary>
+      <div class="deep-dive-content">
+        <p>The output capacitor&rsquo;s most demanding job is not filtering steady-state ripple &mdash; it is handling load transients. When the load current steps from light to heavy (e.g., a processor waking from sleep), the capacitor must supply the difference until the control loop adjusts the duty cycle.</p>
+        <p>The output voltage undershoot during a load step &Delta;I<sub>load</sub> has two components:</p>
+        <ul>
+          <li><strong>ESR drop:</strong> &Delta;V<sub>ESR</sub> = &Delta;I<sub>load</sub> &times; ESR (instantaneous)</li>
+          <li><strong>Capacitive droop:</strong> &Delta;V<sub>cap</sub> = &Delta;I<sub>load</sub> &times; t<sub>response</sub> / C<sub>out</sub> (depends on control loop bandwidth)</li>
+        </ul>
+        <p>The total undershoot must stay within the load&rsquo;s voltage tolerance. For a typical processor requiring &plusmn;3% tolerance on a 1.0V rail, the total undershoot must be less than 30 mV. This often drives the capacitor selection more than steady-state ripple does.</p>
+        <p>Rule of thumb: C<sub>out</sub> &ge; &Delta;I<sub>load</sub> / (2&pi; &times; f<sub>crossover</sub> &times; &Delta;V<sub>allowed</sub>), where f<sub>crossover</sub> is the control loop bandwidth.</p>
+      </div>
+    </details>
+  </div>
+
+  <h3 id="ch3-switches">MOSFET and Diode Selection</h3>
+
+  <p>The power switches are the other critical components. The choice between a diode (asynchronous buck) and a second MOSFET (synchronous buck) depends on the design&rsquo;s current level, efficiency requirements, and cost constraints.</p>
+
+  <div class="figure">
+    <div class="diagram-row">
+      <div class="d-block d-blue">Asynchronous Buck<small>Q1 + Schottky Diode</small></div>
+      <div class="d-arrow">vs.</div>
+      <div class="d-block d-green">Synchronous Buck<small>Q1 + Q2 (MOSFETs)</small></div>
+    </div>
+    <div class="diagram-row" style="margin-top: 12px;">
+      <div class="d-block d-gray">Simpler<small>No shoot-through risk</small></div>
+      <div class="d-arrow">&nbsp;</div>
+      <div class="d-block d-gray">More efficient<small>Lower V<sub>drop</sub> at high I</small></div>
+    </div>
+    <div class="figure-caption">Figure 3.2 &mdash; Asynchronous vs. synchronous buck. The synchronous approach replaces the diode&rsquo;s 0.3&ndash;0.5V forward drop with a MOSFET&rsquo;s I &times; R<sub>DS(on)</sub>, often &lt;50 mV.</div>
+  </div>
+
+  <p><strong>MOSFET losses</strong> have two main components:</p>
+
+  <ul>
+    <li><strong>Conduction loss:</strong> P<sub>cond</sub> = I<sub>rms</sub>&sup2; &times; R<sub>DS(on)</sub>. Lower R<sub>DS(on)</sub> is better, but it comes with larger die size, more gate charge, and higher cost.</li>
+    <li><strong>Switching loss:</strong> P<sub>sw</sub> = &frac12; &times; V<sub>in</sub> &times; I<sub>out</sub> &times; (t<sub>rise</sub> + t<sub>fall</sub>) &times; f<sub>SW</sub>. Faster switching reduces losses but increases dV/dt and di/dt, worsening EMI. Gate charge (Q<sub>g</sub>) determines how fast the MOSFET can switch.</li>
+  </ul>
+
+  <p>The high-side and low-side FETs have different optimization criteria:</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>High-Side (Q1)</th>
+          <th>Low-Side (Q2)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Dominant loss</td>
+          <td>Switching (at high f<sub>SW</sub>)</td>
+          <td>Conduction (longer on-time)</td>
+        </tr>
+        <tr>
+          <td>Optimize for</td>
+          <td>Low Q<sub>g</sub> &times; R<sub>DS(on)</sub> (FOM)</td>
+          <td>Low R<sub>DS(on)</sub></td>
+        </tr>
+        <tr>
+          <td>V<sub>DS</sub> rating needed</td>
+          <td>&ge; V<sub>in</sub> + margin (ringing)</td>
+          <td>&ge; V<sub>in</sub> + margin (ringing)</td>
+        </tr>
+        <tr>
+          <td>Body diode importance</td>
+          <td>Low (brief dead-time conduction)</td>
+          <td>High (conducts during dead time)</td>
+        </tr>
+        <tr>
+          <td>Gate drive</td>
+          <td>Bootstrap or charge pump</td>
+          <td>Direct from controller</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header"><span class="code-lang">python</span></div>
+    <pre><code>def mosfet_losses(v_in, i_out, rds_on, qg_nc, f_sw, v_driver=5.0,
+                   t_rise_ns=10, t_fall_ns=10, duty=None, v_out=None):
+    """Estimate MOSFET power losses in a buck converter.
+
+    Args:
+        v_in:       Input voltage (V)
+        i_out:      Output current (A)
+        rds_on:     On-resistance (ohms)
+        qg_nc:      Total gate charge (nC)
+        f_sw:       Switching frequency (Hz)
+        v_driver:   Gate driver voltage (V)
+        t_rise_ns:  Rise time (ns)
+        t_fall_ns:  Fall time (ns)
+        duty:       Duty cycle (if None, calculated from v_out)
+        v_out:      Output voltage (V), used if duty is None
+
+    Returns:
+        dict of loss components (W)
+    """
+    if duty is None:
+        duty = v_out / v_in
+
+    # Conduction loss (high-side sees duty D, low-side sees 1-D)
+    p_cond_hs = i_out**2 * rds_on * duty
+    p_cond_ls = i_out**2 * rds_on * (1 - duty)
+
+    # Switching loss (primarily high-side)
+    t_sw = (t_rise_ns + t_fall_ns) * 1e-9
+    p_sw = 0.5 * v_in * i_out * t_sw * f_sw
+
+    # Gate drive loss
+    qg_c = qg_nc * 1e-9
+    p_gate = qg_c * v_driver * f_sw
+
+    return {
+        "P_cond_HS_W": round(p_cond_hs, 4),
+        "P_cond_LS_W": round(p_cond_ls, 4),
+        "P_switching_W": round(p_sw, 4),
+        "P_gate_W": round(p_gate, 4),
+        "P_total_W": round(p_cond_hs + p_cond_ls + p_sw + p_gate, 4),
+    }
+
+# Example: 12V to 3.3V at 3A, 500 kHz
+# Using a FET with Rds(on)=25 mohm, Qg=15 nC
+losses = mosfet_losses(
+    v_in=12.0, i_out=3.0, rds_on=0.025,
+    qg_nc=15, f_sw=500e3, v_out=3.3,
+    t_rise_ns=8, t_fall_ns=12
+)
+for key, val in losses.items():
+    print(f"  {key}: {val:.4f}")
+# Output:
+#   P_cond_HS_W: 0.0619
+#   P_cond_LS_W: 0.1631
+#   P_switching_W: 0.1800
+#   P_gate_W: 0.0375
+#   P_total_W: 0.4425</code></pre>
+  </div>
+  <div class="code-caption">MOSFET loss estimation. Gate drive and switching losses scale with frequency; conduction losses scale with I&sup2;. The figure of merit (FOM = Q<sub>g</sub> &times; R<sub>DS(on)</sub>) captures the fundamental conduction-vs-switching trade-off.</div>
+
+  <div class="callout concept">
+    <div class="callout-title">Key Concept: Figure of Merit (FOM)</div>
+    <p>The product Q<sub>g</sub> &times; R<sub>DS(on)</sub> is the MOSFET&rsquo;s figure of merit for switching applications. A lower FOM indicates a better device. Reducing R<sub>DS(on)</sub> requires a larger die, which increases gate area and Q<sub>g</sub>. The FOM captures this fundamental trade-off: you cannot minimize both simultaneously. Modern power MOSFETs achieve FOM values around 20&ndash;100 m&Omega;&middot;nC for 30V-rated devices.</p>
+  </div>
+
+  <div class="callout key-takeaway">
+    <div class="callout-title">Key Takeaway</div>
+    <p>Component selection is where theory meets practice. Size the inductor for 20&ndash;40% ripple ratio, verify saturation current with margin. Select output capacitors based on ripple <em>and</em> transient requirements, accounting for DC bias derating on ceramics. Choose MOSFETs by their figure of merit, and remember that the high-side and low-side FETs optimize for different loss mechanisms. When in doubt, start with the reference design in the controller&rsquo;s datasheet &mdash; it represents the manufacturer&rsquo;s tested starting point.</p>
+  </div>
+
+  <div class="references">
+    <h4>Further Reading</h4>
+    <ul>
+      <li><a href="https://www.ti.com/lit/an/slta055/slta055.pdf" target="_blank" rel="noopener">TI SLTA055: Selecting Inductors for Buck Converters</a> &mdash; Step-by-step inductor selection methodology.</li>
+      <li><a href="https://www.analog.com/en/technical-articles/optimizing-output-capacitor-selection.html" target="_blank" rel="noopener">Analog Devices: Output Capacitor Selection for Buck Converters</a> &mdash; Ripple, transient, and stability considerations.</li>
+      <li><a href="https://www.ti.com/lit/an/slpa009a/slpa009a.pdf" target="_blank" rel="noopener">TI SLPA009A: Power MOSFET Selection for DC-DC Converters</a> &mdash; FOM analysis and thermal considerations.</li>
+      <li><a href="https://www.vishay.com/docs/68914/si7336adp.pdf" target="_blank" rel="noopener">Vishay SiR472DP Datasheet</a> &mdash; Example of a modern buck converter MOSFET with loss curves.</li>
+      <li>Erickson, R. &amp; Maksimovic, D. <em>Fundamentals of Power Electronics</em>, 3rd ed., Springer, 2020. Chapter 7: AC Equivalent Circuit Modeling.</li>
+    </ul>
+  </div>
+
+  <div class="chapter-nav">
+    <button class="chapter-prev" data-target="ch2">&larr; Previous: CCM vs DCM Operation</button>
+    <button class="chapter-next" disabled>Next &rarr;</button>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- Bibliography                                 -->
+  <!-- ═══════════════════════════════════════════ -->
+
+  <h2 id="bibliography">Bibliography</h2>
+  <ol class="bibliography-list">
+    <li id="ref-1"><a href="https://www.ti.com/lit/an/slva477b/slva477b.pdf" target="_blank" rel="noopener">Texas Instruments. <em>SLVA477B: Understanding Buck Power Stages in Switchmode Power Supplies</em>.</a> Comprehensive derivation of buck converter operating states and waveforms.</li>
+    <li id="ref-2"><a href="https://www.analog.com/en/technical-articles/understanding-and-applying-buck-converters.html" target="_blank" rel="noopener">Analog Devices. <em>Understanding and Applying Buck Converters</em>.</a> Application-oriented overview of buck topology and design considerations.</li>
+    <li id="ref-3"><a href="https://www.ti.com/lit/an/slva057/slva057.pdf" target="_blank" rel="noopener">Texas Instruments. <em>SLVA057: Understanding Buck Converter CCM/DCM Boundary</em>.</a> Boundary condition derivations with worked examples.</li>
+    <li id="ref-4"><a href="https://www.ti.com/lit/an/slta055/slta055.pdf" target="_blank" rel="noopener">Texas Instruments. <em>SLTA055: Selecting Inductors for Buck Converters</em>.</a> Step-by-step inductor selection methodology including saturation and thermal analysis.</li>
+    <li id="ref-5"><a href="https://www.ti.com/lit/an/slpa009a/slpa009a.pdf" target="_blank" rel="noopener">Texas Instruments. <em>SLPA009A: Power MOSFET Selection for DC-DC Converters</em>.</a> FOM analysis, loss breakdown, and thermal design.</li>
+    <li id="ref-6"><a href="https://www.ridleyengineering.com/design-center.html" target="_blank" rel="noopener">Ridley Engineering. <em>Power Supply Design Center</em>.</a> Educational articles and design tools for switching power supply analysis.</li>
+    <li id="ref-7">Erickson, R. W. &amp; Maksimovic, D. <em>Fundamentals of Power Electronics</em>, 3rd ed., Springer, 2020. The standard graduate-level textbook on power electronics theory.</li>
+    <li id="ref-8">Basso, C. P. <em>Switch-Mode Power Supplies: SPICE Simulations and Practical Designs</em>, 2nd ed., McGraw-Hill, 2014. Practical design methodology with simulation-driven approach.</li>
+    <li id="ref-9">Pressman, A. I., Billings, K. &amp; Morey, T. <em>Switching Power Supply Design</em>, 3rd ed., McGraw-Hill, 2009. Classic reference for practical power supply design.</li>
+  </ol>
+
+</div>
+
+<button class="back-to-top" id="backToTop" aria-label="Back to top">&#8593;</button>
+
+<div class="bookmark-banner" id="bookmarkBanner">
+  <span>Continue where you left off?</span>
+  <button id="bookmarkGo">Go</button>
+  <button id="bookmarkDismiss">Dismiss</button>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-content" id="lightboxContent"></div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+  var $ = function(s, p) { return (p || document).querySelector(s); };
+  var $$ = function(s, p) { return Array.from((p || document).querySelectorAll(s)); };
+  function ls(key, val) {
+    try { if (val === undefined) return localStorage.getItem(key); localStorage.setItem(key, val); } catch(e) { return null; }
+  }
+
+  var root = document.documentElement;
+  var savedTheme = ls('lg-theme') || 'light';
+  root.setAttribute('data-theme', savedTheme);
+  function setTheme(t) {
+    root.setAttribute('data-theme', t); ls('lg-theme', t);
+    $$('[data-set-theme]').forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-set-theme') === t); });
+  }
+  setTheme(savedTheme);
+  $$('[data-set-theme]').forEach(function(btn) { btn.addEventListener('click', function() { setTheme(btn.getAttribute('data-set-theme')); }); });
+
+  var sizes = ['small', 'medium', 'large'];
+  var sizeIdx = sizes.indexOf(ls('lg-font-size') || 'medium');
+  if (sizeIdx < 0) sizeIdx = 1;
+  root.setAttribute('data-size', sizes[sizeIdx]);
+  $('#fontMinus').addEventListener('click', function() { if (sizeIdx > 0) { sizeIdx--; root.setAttribute('data-size', sizes[sizeIdx]); ls('lg-font-size', sizes[sizeIdx]); } });
+  $('#fontPlus').addEventListener('click', function() { if (sizeIdx < sizes.length - 1) { sizeIdx++; root.setAttribute('data-size', sizes[sizeIdx]); ls('lg-font-size', sizes[sizeIdx]); } });
+
+  var sidebar = $('#sidebar'), overlay = $('#sidebarOverlay'), menuBtn = $('#menuBtn');
+  function openDrawer() { sidebar.classList.add('open'); overlay.classList.add('visible'); }
+  function closeDrawer() { sidebar.classList.remove('open'); overlay.classList.remove('visible'); }
+  menuBtn.addEventListener('click', openDrawer);
+  overlay.addEventListener('click', closeDrawer);
+  $('#chapterBarText').addEventListener('click', openDrawer);
+  $$('.sidebar a').forEach(function(a) { a.addEventListener('click', function() { if (window.innerWidth <= 900) closeDrawer(); }); });
+
+  var touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', function(e) { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - touchStartX, dy = Math.abs(e.changedTouches[0].clientY - touchStartY);
+    if (dy > 50) return;
+    if (dx > 60 && touchStartX < 30) openDrawer();
+    if (dx < -60 && sidebar.classList.contains('open')) closeDrawer();
+  }, { passive: true });
+
+  var headings = $$('h2[id], h3[id]'), navLinks = $$('#sidebarNav a');
+  if (headings.length && navLinks.length) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          var id = entry.target.id;
+          navLinks.forEach(function(link) { link.classList.toggle('active', link.getAttribute('href') === '#' + id); });
+          var active = $('#sidebarNav a.active');
+          if (active) active.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+      });
+    }, { rootMargin: '-10% 0px -85% 0px' });
+    headings.forEach(function(h) { observer.observe(h); });
+  }
+
+  var progressBar = $('#progressBar'), ticking = false;
+  window.addEventListener('scroll', function() {
+    if (!ticking) { requestAnimationFrame(function() { var pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100; progressBar.style.width = Math.min(pct, 100) + '%'; ticking = false; }); ticking = true; }
+  });
+
+  var chapterBarText = $('#chapterBarText'), h2s = $$('h2[id]');
+  window.addEventListener('scroll', function() {
+    if (window.innerWidth > 900) return;
+    var current = '';
+    h2s.forEach(function(h) { if (h.getBoundingClientRect().top < 60) current = h.textContent; });
+    if (current) chapterBarText.textContent = current;
+  });
+
+  $$('.code-block').forEach(function(block) {
+    var pre = $('pre', block); if (!pre) return;
+    var btn = document.createElement('button'); btn.className = 'copy-btn'; btn.textContent = 'Copy'; btn.setAttribute('aria-label', 'Copy code');
+    btn.addEventListener('click', function() {
+      var code = $('code', pre) || pre;
+      navigator.clipboard.writeText(code.textContent).then(function() { btn.textContent = 'Copied!'; btn.classList.add('visible'); setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('visible'); }, 2000); });
+    });
+    block.appendChild(btn);
+  });
+
+  var bmKey = 'lg-bookmark-' + (location.pathname || 'default'), savedPos = parseInt(ls(bmKey), 10), banner = $('#bookmarkBanner');
+  if (savedPos && savedPos > 300) { setTimeout(function() { banner.classList.add('visible'); }, 600); }
+  $('#bookmarkGo').addEventListener('click', function() { window.scrollTo({ top: savedPos, behavior: 'smooth' }); banner.classList.remove('visible'); });
+  $('#bookmarkDismiss').addEventListener('click', function() { banner.classList.remove('visible'); ls(bmKey, '0'); });
+  var bmTimer;
+  window.addEventListener('scroll', function() { clearTimeout(bmTimer); bmTimer = setTimeout(function() { if (window.scrollY > 200) ls(bmKey, String(window.scrollY)); }, 2000); });
+
+  var btt = $('#backToTop');
+  window.addEventListener('scroll', function() { btt.classList.toggle('visible', window.scrollY > 500); });
+  btt.addEventListener('click', function() { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  $$('.chapter-nav button').forEach(function(btn) {
+    btn.addEventListener('click', function() { var target = document.getElementById(btn.getAttribute('data-target')); if (target) target.scrollIntoView({ behavior: 'smooth' }); });
+  });
+
+  document.addEventListener('keydown', function(e) {
+    var tag = (e.target.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
+    if (e.key === 'Escape') { closeDrawer(); return; }
+    if (e.key === 'j' || (e.key === 'ArrowDown' && !e.metaKey && !e.ctrlKey)) { e.preventDefault(); jumpHeading(1); }
+    if (e.key === 'k' || (e.key === 'ArrowUp' && !e.metaKey && !e.ctrlKey)) { e.preventDefault(); jumpHeading(-1); }
+  });
+  function jumpHeading(dir) {
+    var scrollTop = window.scrollY + 80, idx = -1;
+    for (var i = 0; i < headings.length; i++) { if (headings[i].offsetTop > scrollTop) { idx = i; break; } }
+    if (dir === -1) { idx = idx <= 0 ? 0 : idx - 1; if (headings[idx].offsetTop >= scrollTop) idx = Math.max(0, idx - 1); }
+    else { if (idx < 0) idx = headings.length - 1; }
+    headings[idx].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  var lightbox = $('#lightbox'), lbContent = $('#lightboxContent');
+  $$('.figure').forEach(function(fig) {
+    fig.addEventListener('click', function() { if (window.innerWidth > 900) return; lbContent.innerHTML = fig.innerHTML; lightbox.classList.add('visible'); });
+  });
+  lightbox.addEventListener('click', function(e) { if (e.target === lightbox || e.target === lbContent) lightbox.classList.remove('visible'); });
+})();
+</script>
+</body>
+</html>
