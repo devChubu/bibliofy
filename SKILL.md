@@ -32,7 +32,7 @@ Determine the mode, topic, and audience. Ask the user these questions:
    - **Project Guide** — Documents this specific project: its architecture, setup, workflows, and how things connect. The reader learns how *this codebase* works.
    - **Textbook** — Teaches the underlying concepts and technologies the project uses. The project serves as real-world examples, but the goal is general knowledge the reader can apply anywhere. Think university textbook, not project README.
 
-2. **Topic** — If invoked from a project directory, read `CLAUDE.md`, scan source files, and identify the domain. If the user provides a topic string, use that directly.
+2. **Topic** — If invoked from a project directory, read `CLAUDE.md`, scan project files (source code, schematics, documentation, specs, design files), and identify the domain. If the user provides a topic string, use that directly. Works for any domain: software, hardware, mixed-signal, systems engineering, or non-technical topics.
 
 3. **Audience & prior knowledge** — Who is this for, and what level should the guide assume?
 
@@ -92,6 +92,10 @@ Read both reference files from this skill's directory:
 2. `references/content-guide.md` — Component catalog with HTML snippets for every content type
 
 ### Step 5: Generate HTML
+
+**Sizing decision:** Estimate the guide size from the approved outline:
+- **Small guide** (1-7 chapters): Generate in one pass — write the entire HTML file at once.
+- **Large guide** (8+ chapters): Generate in **phases** to avoid context limits. Write the full HTML scaffold (all CSS, JS, cover banner, and complete sidebar nav for ALL chapters) with the first 3-4 chapters of content. Save the file. Then in subsequent phases, read the file, generate the next 3-4 chapters, and insert them before the bibliography section using Edit. Repeat until all chapters are written. The file must be valid, working HTML at every phase. Tell the user at the start of each phase: "Writing chapters N-M of T (Phase X)..."
 
 Build the complete HTML file by filling the template:
 
