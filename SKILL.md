@@ -12,7 +12,7 @@ version: 1.0.0
 
 # Bibliofy — Learning Guide Generator
 
-Generates a self-contained HTML learning guide document. Single file, zero external dependencies, with three reading themes (Light, Dark, Book), interactive navigation, and rich content components.
+Generates a self-contained HTML learning guide document. Two modes: **Project Guide** (documents a specific project) or **Textbook** (teaches the underlying concepts a project uses, from first principles). Single file, zero external dependencies, with three reading themes (Light, Dark, Book), interactive navigation, and rich content components.
 
 ## Output Format
 
@@ -26,12 +26,32 @@ Generates a self-contained HTML learning guide document. Single file, zero exter
 
 ### Step 1: Analyze Context
 
-Determine the topic and audience:
+Determine the mode, topic, and audience. Ask the user these questions:
 
-- If invoked from a project directory, read `CLAUDE.md`, scan source files, and identify the domain
-- If the user provides a topic string, use that directly
-- Confirm the topic, target audience, and scope with the user before proceeding
-- Ask: What level of prior knowledge should the guide assume?
+1. **Mode** — Which type of guide?
+   - **Project Guide** — Documents this specific project: its architecture, setup, workflows, and how things connect. The reader learns how *this codebase* works.
+   - **Textbook** — Teaches the underlying concepts and technologies the project uses. The project serves as real-world examples, but the goal is general knowledge the reader can apply anywhere. Think university textbook, not project README.
+
+2. **Topic** — If invoked from a project directory, read `CLAUDE.md`, scan source files, and identify the domain. If the user provides a topic string, use that directly.
+
+3. **Audience & prior knowledge** — Who is this for, and what level should the guide assume?
+
+#### Mode differences in content generation:
+
+**Project Guide mode:**
+- Chapters organized around the project's architecture and components
+- Content explains how and why things are built the way they are
+- Code examples are from the actual project source
+- Diagrams show the project's architecture, data flow, module relationships
+- References point to project-specific dependencies, APIs, and tools
+
+**Textbook mode:**
+- Chapters organized around concepts and knowledge domains (e.g., "Interrupts", "RTOS", "Buck Converters")
+- Content teaches from first principles — what, why, how, with theory and intuition
+- Code examples illustrate concepts, using the project as one concrete example among general patterns
+- Diagrams explain concepts generically (how an ADC works, how a state machine operates)
+- References point to textbooks, standards, authoritative tutorials, and documentation
+- Use callout boxes like "In Our Project" (concept callout) to bridge theory back to the specific codebase
 
 ### Step 2: Research
 
